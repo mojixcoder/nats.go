@@ -2959,12 +2959,15 @@ func (sub *Subscription) FetchBatch(batch int, opts ...PullOpt) (MessageBatch, e
 			if err != nil {
 				break
 			}
+
 			var usrMsg bool
 
 			usrMsg, err = checkMsg(msg, true, false)
 			if err != nil {
 				if err == ErrTimeout {
-					err = nil
+					fmt.Println("request timed out")
+					// ignore server timeout, we should get context timeout anyway
+					continue
 				}
 				break
 			}
