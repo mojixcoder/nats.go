@@ -3072,6 +3072,7 @@ func (js *js) getConsumerInfoContext(ctx context.Context, stream, consumer strin
 		}
 		return nil, info.Error
 	}
+	fmt.Printf("cons info: %+v\n", info.ConsumerInfo)
 	return info.ConsumerInfo, nil
 }
 

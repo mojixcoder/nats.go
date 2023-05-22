@@ -8032,7 +8032,11 @@ func TestJetStreamMsgSubjectRewrite(t *testing.T) {
 }
 
 func TestJetStreamPullSubscribeFetchContext(t *testing.T) {
-	withJSCluster(t, "PULLCTX", 3, testJetStreamFetchContext)
+	for i := 0; i < 40; i++ {
+		t.Run("test", func(t *testing.T) {
+			withJSCluster(t, "PULLCTX", 3, testJetStreamFetchContext)
+		})
+	}
 }
 
 func testJetStreamFetchContext(t *testing.T, srvs ...*jsServer) {
@@ -8228,8 +8232,9 @@ func testJetStreamFetchContext(t *testing.T, srvs ...*jsServer) {
 		// Fetch the rest using same cancellation context.
 		expected := int(total - 1)
 		msgs, err = sub.Fetch(expected, nats.Context(ctx))
+		fmt.Println("expected: ", expected)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("Unexpected error when fetching expected: %s", err)
 		}
 		if len(msgs) != expected {
 			t.Fatalf("Expected %d messages, got: %d", expected, len(msgs))
